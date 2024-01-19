@@ -1,0 +1,1437 @@
+create database curso_sql;
+use curso_sql;
+
+#Crear una tabla
+create table usuario(
+nombre varchar(50),
+edad int(15)
+);
+
+#Mostras las tablas (SHOW TABLES)
+show tables;
+
+#Describir una tabla
+describe usuario;
+
+#Eliminar una tabla
+drop table usuarios;
+
+#Trabajando con tablas
+create table alumnos(
+nombre varchar(50),
+apellido varchar(50),
+direccion varchar(100),
+telefono varchar(15),
+edad int(11)
+);
+
+#Trabajado con INSERT
+insert into alumnos(nombre,apellido,direccion,telefono,edad) values('Juan','Lopez','Barrio Mella','8296745236',45);
+insert into alumnos values('Pedro','Montero','27 de febrero','8096874536',15);
+insert into alumnos values('Samuel','Medrano','Calle Marzo','8096874536',28);
+insert into alumnos values('Elvis','Taveraz','Manuela 10','8096874536',22);
+insert into alumnos(nombre,telefono,edad) values('Miguel','8096478632',36);
+
+#Trabajando con SELECT
+select * from alumnos;
+select nombre, direccion from alumnos;
+select edad, apellido from alumnos;
+
+#Trabajando con la condicion WHERE
+select * from alumnos where nombre = 'Juan';
+select nombre, edad from alumnos where edad = '45';
+
+#Operadores Relacionales
+# =
+# <>
+# >
+# <
+# >=
+# <=
+
+select * from alumnos where nombre = 'Juan';
+select * from alumnos where nombre <> 'Juan';
+select * from alumnos where edad > 15;
+select * from alumnos where edad < 40;
+select * from alumnos where edad >= 15;
+select * from alumnos where edad <= 35;
+select nombre, telefono from alumnos where edad <> 35;
+select * from alumnos where edad = 45;
+
+#Trabajando con DELETE
+select * from alumnos;
+delete from alumnos;
+
+delete from alumnos where nombre ='Juan';
+
+#Trabajando con UPDATE
+Update alumnos set edad = 33;
+update alumnos set edad = 15 where nombre = 'Pedro';
+update alumnos set direccion = 'Mendoza', telefono = '829671466' where nombre = 'Samuel';
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+#Eliminar la base de datos ya existente.
+drop database if exists curso_sql;
+
+#show databases;
+
+create database if not exists curso_sql;
+use curso_sql;
+
+create table if not exists usuario(
+nombre varchar(50),
+apellido varchar(50),
+correo varchar(100),
+primary key(nombre)
+);
+insert into usuario values('Juan','Perez','juan@juan.com');
+insert into usuario values('Juan','Lopez','juan@Lopez.com');
+describe usuario;
+
+drop table if exists producto;
+
+create table if not exists producto(
+id int(11) not null auto_increment,
+producto varchar(50) not null,
+descripcion text null,
+precio float(11,2) not null,
+primary key(id)
+);
+--------------------------------------------------------------------------------------------------------------------------------
+# el id como primaria y el null haran que automaticamente se enumeren cada una de las filas  de cada columnas con los registros
+--------------------------------------------------------------------------------------------------------------------------------
+describe producto;
+insert into producto values(null,'Laptop','La mejor laptop del mercado.',128.6);
+insert into producto(id, producto, descripcion, precio) values(null,'','Mejor producto.',78.5);
+insert into producto values(null,'Mouse','Prende luz.',5.8);
+insert into producto(id, producto, descripcion, precio) values(null,'Laptop','La mejor laptop del mercado.',128.6);
+select * from producto;
+
+delete from producto;
+truncate table producto;
+
+#unsigned
+create table persona(
+id integer unsigned not null,
+nombre varchar(50),
+edad integer unsigned,
+primary key(id)
+);
+describe persona;
+
+#Tipos de datos
+
+#numericos
+
+#enteros
+TINYINT -127 128 UNSIGNED 
+SMALLINT 
+MEDIUMINT 
+INT O INTEGER
+BIGINT 
+
+#decimales
+FLOAT
+precio float(6.24)
+DOUBLE
+precio double(4.53)
+DECIMAL
+
+
+#cadenas
+
+CHAR 255 
+nombre char(100) juan 
+
+VARCHAR 255 - 65.534
+nombre varchar(100) juan
+
+BINARY Y VARBINARY
+
+TEXT 
+
+BLOB
+
+TINYBLOB 255, MEDIUMBLOB  Y LONGBLOB 4GB
+
+ENUM 
+
+SET 
+
+#fecha
+
+DATE
+AAAA-MM-DD
+
+20190715
+2019-07-15
+
+DATETIME
+AAAA-MM-DD HH:MM:SS
+
+TIME
+HH:MM:SS
+
+TIMESTAMP
+
+AAAA-MM-DD
+AA-MM-DD
+
+ON UPDATE CURRENT_TIMESTAMP
+
+YEAR
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+Funciones en tablas
+
+drop database if exists curso_sql;
+
+create database if not exists curso_sql;
+use curso_sql;
+
+create table if not exists productos(
+id integer unsigned not null auto_increment,
+nombre varchar(50),
+proveedor varchar(50),
+descripcion text,
+precio decimal(5,2) unsigned,
+cantidad smallint unsigned,
+primary key(id)
+);
+
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Laptop HP','HP','Las mejores laptop',155.69,50);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Mouse','Logitech','Las mejores mouse',20.86,30);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Teclado','Logitech','Las mejores teclados',80.12,100);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Laptop DELL','Dell','Las mejores laptop',200.8,15);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Pantalla','HP','Las mejores Pantallas',155.69,50);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Impresora','HP','Las mejores Impresoras',155,70);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Camaras','logitech','Las mejores Camaras',500,20);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Xbox 360','Xbox Microsoft','Las mejores Consolas',103,10);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('PlayStation 4','Sony','Las mejores play',15.69,50);
+insert into productos(nombre, proveedor, descripcion, precio, cantidad) values('Lenovo 310','Lenovo','Las mejores laptop',155.69,50);
+
+#Columnas Calculadas
+select nombre, precio, cantidad from productos;
+select nombre, precio, cantidad, precio*cantidad from productos;
+select nombre, precio,precio*0.1,precio-(precio*0.1) from productos;
+
+#Funciones de manejo de cadenas
+select concat('Hola,',' ','como estas?');
+select concat_ws('/','Miguel','Lopez','Martinez');
+select length('Hola a todos');
+select left('Buenas Noches',8);
+select right('Buenas Tardes',10);
+select ltrim('        Udemy     ');
+select rtrim('      Udemy    ');
+select trim('    Udemy    ');
+select replace('xxx.udemy.com','x','w');
+select repeat('SQL', 5);
+select reverse('Hola');
+select lower('Hola, CoMO EsTaN?');#cambian la letra a minuscula
+select lcase('Hola, CoMO EsTaN?');#"
+select upper('Hola, CoMO EsTaN?');#cambian la letra a mayuscula
+select ucase('hola amigos');#"
+
+select concat_ws('/', nombre, precio) from productos;
+select left(nombre, 5) from productos;
+select lower(nombre), upper(descripcion) from productos;
+
+#Funciones Matematicas
+select nombre, precio from productos;
+select ceiling(precio) from productos;
+select floor(precio) from productos;
+select mod(10, 3);
+select mod(10, 2);
+select power(2,3);
+select round(20.60);
+select round(20.12);
+
+#Order By
+select nombre, descripcion, precio, cantidad from productos order by nombre;
+select nombre, precio, cantidad from productos order by nombre desc;
+select nombre, precio, descripcion, cantidad from productos order by nombre desc, precio asc;
+
+#Operadores Logicos
+
+#and = "y"
+#or = "y/o"
+#xor "o"
+#not = "not"
+
+select * from productos;
+
+select * from productos where (proveedor = 'HP') and (precio <= 200);
+select * from productos where (proveedor = 'H') or (descripcion = 'Las mejores laptop');
+select * from productos where (proveedor = 'HP') xor (precio <= 200);
+select * from productos where not (proveedor = 'Logitech');
+
+#Operadores Relacionales Between - in
+
+select * from productos where precio>=100 and precio<=160;
+select * from productos where not precio between 100 and 160;
+
+select * from productos where proveedor = 'HP' or descripcion = 'La mejor laptop';
+select * from productos where proveedor in('HP', 'La mejor laptop');
+
+
+#Busqueda de patrones like- not like
+select * from productos;
+select * from productos where descripcion = 'laptop';
+select * from productos where descripcion not like '%laptop%';
+select * from productos where nombre not like 'laptop%';
+
+#Patron de busqueda Regexp- not Regexp
+select * from productos where proveedor regexp 'logi';
+select * from productos where proveedor regexp '[p]';
+select * from productos where proveedor regexp '[a-d]';
+select * from productos where proveedor regexp '^D';
+select * from productos where proveedor regexp 'o..i';
+select * from productos where nombre regexp 'a.*a';
+
+#Funcion count
+
+select * from productos;
+select count(*) from productos;
+
+select count(*) from productos where proveedor = 'HP';
+select count(*) from productos where descripcion like '%laptop%';
+
+#Funciones de Agrupamientos
+
+select sum(cantidad) from productos;
+select sum(cantidad) from productos where proveedor = 'HP';
+
+select max(precio) from productos;
+select min(precio) from productos;
+select min(precio) from productos where nombre like '%Laptop%';
+select avg(precio) from productos where nombre like '%Laptop%';
+
+#Funcion de Agrupamiento group by
+create table visitantes(
+  nombre varchar(30),
+  edad tinyint unsigned,
+  sexo char(1),
+  domicilio varchar(30),
+  ciudad varchar(20),
+  telefono varchar(11),
+  montocompra decimal (6,2) unsigned
+ );
+
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Susana Molina', 28,'f','Colon 123','Cordoba',null,45.50); 
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Marcela Mercado',36,'f','Avellaneda 345','Cordoba','4545454',0);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Alberto Garcia',35,'m','Gral. Paz 123','Alta Gracia','03547123456',25); 
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Teresa Garcia',33,'f','Gral. Paz 123','Alta Gracia','03547123456',0);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Roberto Perez',45,'m','Urquiza 335','Cordoba','4123456',33.20);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Marina Torres',22,'f','Colon 222','Villa Dolores','03544112233',25);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Julieta Gomez',24,'f','San Martin 333','Alta Gracia','03547121212',53.50);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Roxana Lopez',20,'f','Triunvirato 345','Alta Gracia',null,0);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Liliana Garcia',50,'f','Paso 999','Cordoba','4588778',48);
+insert into visitantes (nombre,edad, sexo,domicilio,ciudad,telefono,montocompra)
+  values ('Juan Torres',43,'m','Sarmiento 876','Cordoba','4988778',15.30);
+  
+select count(*) from visitantes where ciudad='Cordoba';
+select count(*) from visitantes where ciudad = 'Alta Gracia';
+
+select ciudad, count(*) from visitantes group by ciudad;
+
+select sexo, sum(montocompra) from visitantes group by sexo;
+
+select sexo, max(montocompra), min(montocompra) from visitantes group by sexo;
+
+select ciudad, sexo, count(*) from visitantes group by ciudad, sexo;
+
+select ciudad, count(*) from visitantes where ciudad<>'Cordoba' group by ciudad;
+
+select ciudad, count(*) from visitantes group by ciudad asc;
+
+
+#registros duplicados distinct
+
+select * from productos;
+select proveedor from productos;
+select distinct proveedor from productos;
+
+select distinct proveedor from productos group by proveedor asc;
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+drop database if exists curso_sql;
+
+create database if not exists curso_sql;
+
+use curso_sql;
+
+#Indice
+
+#Primary
+#index
+#unique
+
+#show index;
+
+#indice Primary
+create table if not exists libro(
+id int unsigned auto_increment not null,
+titulo varchar(100),
+autor varchar(50),
+descripcion text,
+editorial varchar(15),
+primary key(id)
+);
+drop table libros;
+
+#tipo index comun
+create table if not exists libros(
+id int unsigned auto_increment not null,
+titulo varchar(100),
+autor varchar(50) not null,
+descripcion text,
+editorial varchar(15) not null,
+primary key(id),
+index i_autoreditorial (autor, editorial)
+);
+
+#tipo unique (unico)
+create table if not exists libros(
+id int unsigned auto_increment not null,
+titulo varchar(100),
+autor varchar(50) not null,
+descripcion text,
+editorial varchar(15) not null,
+primary key(id)
+);
+show index from libros;
+
+insert into libros(titulo, autor, editorial) values('Java en 10 minutos', 'Alejandro', 'La Maravilla');
+insert into libros(titulo, autor, editorial) values('Java', 'Alejandro', 'La Maravilla');
+
+#Eliminar un indice
+drop index i_autor on libros;
+drop index uq_titulo on libros;
+
+create index i_editorial on libros (editorial);
+create unique index uq_titulo on libros (titulo);
+
+select * from libros;
+
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+drop database if exists curso_sql;
+create database if not exists curso_sql;
+use curso_sql;
+
+#Modificando nuestras tablas (Alter Table)
+
+#alter table add
+
+drop table productos;
+
+create table productos(
+id int unsigned not null,
+nombre varchar(50)
+);
+
+describe productos;
+
+#Agregando un campo ADD
+alter table productos add precio int;
+alter table productos add cantidad smallint unsigned not null;
+
+#Eliminando un campo DROP
+alter table productos drop precio;
+alter table productos drop precio, drop cantidad;
+
+#Modificar campos de las tablas MODIFY
+alter table productos modify nombre varchar(100) not null;
+alter table productos modify precio decimal(4,2) not null;
+
+#Cambiar el nombre de un campo CHANGE
+alter table productos change cantidad stock int;
+alter table productos change nombre titulop varchar(50) not null;
+
+#Agregando y eliminando clave Primaria ADD-DROP
+alter table productos add primary key(id);
+alter table productos add primary key(nombre);
+alter table productos modify id int unsigned auto_increment not null;
+
+alter table productos drop primary key;
+alter table productos modify id int unsigned;
+
+describe productos;
+
+#Agregar Indices ADD-DROP-INDEX
+alter table productos add index i_preciocantida (precio,cantida);
+alter table productos drop index i_precicantidad;
+
+#Renombrar una tabla RENAME-TO
+
+show tables;
+
+alter table productos rename cliente; 
+rename table cliente to productos;
+
+
+rename table productos to auxiliar,
+clientes to productos,
+auxiliar to clientes;
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+drop database if exists curso_sql;
+create database if not exists curso_sql;
+use curso_sql;
+
+show tables;
+
+drop table productos;
+
+create table if not exists productos(
+id int unsigned not null auto_increment,
+nombre varchar(50) not null,
+descripcion text,
+proveedorid int unsigned not null,
+precio decimal(5,2),
+cantidad smallint unsigned default 0,
+primary key(id),
+unique index (nombre),
+foreign key(proveedorid) references proveedor(id)
+);
+describe productos;
+
+select * from productos;
+
+drop table if exists proveedor;
+
+create table if not exists proveedor(
+id int unsigned not null auto_increment,
+nombre varchar(50),
+primary key(id),
+unique index (nombre)
+);
+
+select * from proveedor;
+
+insert into proveedor (nombre) values('Lenovo');
+insert into proveedor (nombre) values('Logitech');
+insert into proveedor (nombre) values('Microsoft'); 
+insert into proveedor (nombre) values('HP');
+
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Lenovo 310', 'La mejor laptop', 1, 100, 50);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Mouse', 'mouse inalambrico', 2, 15.96, 5);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Office 360', 'Paquete de Ofice', 3, 150.69, 30);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('HP Y700', 'La mejor laptop del mercado', 4, 10, 15);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Alfombra Lenovo', 'Alfombras asombrosas', 1, 300, 40);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('laptop HP 1000', 'No funciona muy bien',4 , 500, 3);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Volante Gamer', 'El mejor volante para jugar', 2, 800, 5);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Disco duro', 'Obten mas capacidad', 3, 70, 80);
+
+#Estructura del Join basico
+select * from productos
+join proveedor
+on productos.proveedorid=proveedor.id;
+
+#Estructura del Join para saber el nombre del proveedor
+select p.nombre, p.descripcion, p.precio, pro.nombre from productos as p
+join proveedor as pro
+on p.proveedorid=pro.id;
+
+#Left Join
+select * from proveedor
+left join productos
+on proveedor.id=productos.proveedorid;
+
+#Right join
+select * from proveedor
+right join productos
+on proveedor.id=productos.proveedorid;
+
+#Inner Join
+select p.nombre, p.descripcion, p.precio, pro.nombre from proveedor as pro
+inner join productos as p
+on pro.id=p.proveedorid;
+
+#Straight join
+select p.nombre, p.descripcion, p.precio, pro.nombre from proveedor as pro
+straight_join productos as p
+on pro.id=p.proveedorid;
+
+#Funciones de agrupamiento group by
+
+
+select pro.nombre, count(p.proveedorid) as 'Cantidad de Productos'
+from proveedor as pro
+join productos as p
+on pro.id=p.proveedorid
+group by pro.nombre;
+
+select pro.nombre, max(p.precio) as 'Mayor Precio'
+from proveedor as pro
+left join productos as p
+on p.proveedorid=pro.id
+group by pro.nombre;
+
+select p.nombre, descripcion, precio, proveedorid from productos as p
+join proveedor as pro
+on p.proveedorid=pro.id;
+
+#Trabajando con mas de dos tablas
+ drop table if exists libros, socios, prestamos;
+ 
+ create table libros(
+  codigo int unsigned auto_increment,
+  titulo varchar(40) not null,
+  autor varchar(20) default 'Desconocido',
+  primary key (codigo)
+ );
+
+ create table socios(
+  documento char(8) not null,
+  nombre varchar(30),
+  domicilio varchar(30),
+  primary key (documento)
+ );
+
+ create table prestamos(
+  documento char(8) not null,
+  codigolibro int unsigned,
+  fechaprestamo date not null,
+  fechadevolucion date,
+  primary key (codigolibro,fechaprestamo)
+ );
+
+
+ insert into socios values('22333444','Juan Perez','Colon 345');
+ insert into socios values('23333444','Luis Lopez','Caseros 940');
+ insert into socios values('25333444','Ana Herrero','Sucre 120');
+
+ insert into libros values(1,'Manual de 2º grado','Molina Manuel');
+ insert into libros values(25,'Aprenda PHP','Oscar Mendez');
+ insert into libros values(42,'Martin Fierro','Jose Hernandez');
+
+ insert into prestamos values('22333444',1,'2016-08-10','2016-08-12');
+ insert into prestamos values('22333444',1,'2016-08-15',null);
+ insert into prestamos values('25333444',25,'2016-08-10','2016-08-13');
+ insert into prestamos values('25333444',42,'2016-08-10',null);
+ insert into prestamos values('25333444',25,'2016-08-15',null);
+ insert into prestamos values('30333444',42,'2016-08-02','2016-08-05');
+ insert into prestamos values('25333444',2,'2016-08-02','2016-08-05');
+ 
+ select * from prestamos;
+ 
+ select nombre, titulo, fechaprestamo
+ from prestamos as p
+ join socios as s
+ on s.documento=p.documento
+ join libros as l
+ on codigolibro=codigo;
+ 
+ select nombre, titulo, fechaprestamo
+ from prestamos as p
+ left join socios as s
+ on p.documento=s.documento
+ left join libros as l
+ on l.codigo=codigolibro;
+ 
+ select nombre, titulo, fechaprestamo
+ from prestamos as p
+ left join socios as s
+ on p.documento=s.documento
+ join libros as l
+ on p.codigolibro=l.codigo;
+ 
+ #Funcion de control IF y CASE con varias tablas
+ select pro.nombre,
+ if(count(p.proveedorid)>0, 'SI', 'NO') as hay
+ from proveedor as pro
+ left join productos as p
+ on pro.id=p.proveedorid
+ group by pro.nombre;
+ 
+ select pro.nombre,
+ case count(p.proveedorid) when 0 then 'NO'
+ else 'SI' end as 'Hay'
+ from proveedor as pro
+ left join productos as p
+ on pro.id=p.proveedorid
+ group by pro.nombre;
+ 
+ #variables de usuario
+ 
+# @nombrevariable:= 
+# int nombrevarible
+ #$variable
+ 
+ select @preciomayor:=max(precio) from productos;
+ 
+ select * from productos where precio=@preciomayor;
+ 
+ select p.nombre, p.descripcion, pro.nombre
+ from productos as p
+ join proveedor as pro
+ on p.proveedorid=pro.id
+ where p.precio = @preciomayor;
+ 
+ #Crear table a partir de otra(CREATE-INSERT)
+ 
+ drop table productos;
+ drop table proveedor;
+ 
+ create table if not exists productos(
+id int unsigned not null auto_increment,
+nombre varchar(50) not null,
+descripcion text,
+proveedor varchar(50),
+precio decimal(5,2),
+cantidad smallint unsigned default 0,
+primary key(id),
+unique index (nombre)
+);
+
+describe productos;
+
+insert into productos(nombre, descripcion, proveedor, precio, cantidad) 
+values('Lenovo 310', 'La mejor laptop', 'Lenovo', 100, 50);
+insert into productos(nombre, descripcion, proveedor, precio, cantidad) 
+values('Mouse', 'mouse inalambrico', 'Logitech', 15.96, 5);
+insert into productos(nombre, descripcion, proveedor, precio, cantidad) 
+values('Office 360', 'Paquete de Ofice', 'Microsoft', 150.69, 30);
+insert into productos(nombre, descripcion, proveedor, precio, cantidad) 
+values('HP Y700', 'La mejor laptop del mercado', 'HP', 10, 15);
+
+create table proveedores
+select distinct proveedor as nombre
+from productos; 
+
+select * from proveedores;
+
+#Crear una tabla apartir de dos tablas(CREATE-INSERT-JOIN)
+
+drop table productos;
+create table if not exists productos(
+id int unsigned not null auto_increment,
+nombre varchar(50) not null,
+descripcion text,
+proveedorid int unsigned not null,
+precio decimal(5,2),
+cantidad smallint unsigned default 0,
+primary key(id),
+unique index (nombre),
+foreign key(proveedorid) references proveedor(id)
+);
+describe productos;
+
+select * from productos;
+
+drop table if exists proveedor;
+
+create table if not exists proveedor(
+id int unsigned not null auto_increment,
+nombre varchar(50),
+primary key(id),
+unique index (nombre)
+);
+
+select * from proveedor;
+
+insert into proveedor (nombre) values('Lenovo');
+insert into proveedor (nombre) values('Logitech');
+insert into proveedor (nombre) values('Microsoft'); 
+insert into proveedor (nombre) values('HP');
+
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Lenovo 310', 'La mejor laptop', 1, 100, 50);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Mouse', 'mouse inalambrico', 2, 15.96, 5);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Office 360', 'Paquete de Ofice', 3, 150.69, 30);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('HP Y700', 'La mejor laptop del mercado', 4, 10, 15);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Alfombra Lenovo', 'Alfombras asombrosas', 1, 300, 40);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('laptop HP 1000', 'No funciona muy bien',4 , 500, 3);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Volante Gamer', 'El mejor volante para jugar', 2, 800, 5);
+insert into productos(nombre, descripcion, proveedorid, precio, cantidad) 
+values('Disco duro', 'Obten mas capacidad', 3, 70, 80);
+
+create table cantidadporproveedor
+select pro.nombre,count(*) as cantidad
+from productos as p
+join proveedor as pro
+on p.proveedorid=p.id
+group by pro.nombre;
+
+select * from cantidadporproveedor;
+
+
+#Insertar datos buscando en valor en otra tabla
+insert into productos(nombre,descripcion, precio, proveedorid, cantidad)
+select 'Teclado', 'El mejor teclado', 100, id, 50
+from proveedor where nombre='Logitech';
+
+select * from productos;
+
+#Actualizar registros con valores de otra tabla(UPDATE)
+alter table productos add proveedor varchar(50);
+
+update productos
+join proveedor
+on productos.proveedorid=proveedor.id
+set productos.proveedor=proveedor.nombre;
+
+alter table productos drop proveedorid;
+drop table proveedor;
+
+select * from productos;
+select * from proveedor;
+
+#Actualizacion en cascada(UPDATE-JOIN)
+update productos as p
+join proveedor as pro
+on p.proveedorid=pro.id
+set p.proveedorid=8,
+pro.id=8
+where pro.nombre='Logitech';
+
+#Borrar Registros consultando otras tablas(DELETE-JOIN)
+delete productos
+from productos
+join proveedor
+on productos.proveedorid=proveedor.id
+where proveedor.nombre = 'HP';
+
+select * from productos;
+select * from proveedor;
+
+#Borrar registros en cascada
+delete productos, proveedor
+from productos
+join proveedor
+on productos.proveedorid=proveedor.id
+where proveedor.nombre='Lenovo';
+
+
+#chequear y reparar tablas(CHECK-REPAIR)
+
+check table productos;
+
+# quick
+# fast
+# changed
+# medium
+# extented
+
+check table productos fast quick;
+
+repair table productos;
+
+#Encriptar valores de nuestra tabla
+
+# aes_encrypt("dato a encriptar", "clave de encriptacion")
+
+drop table if exists clientes;
+
+create table clientes(
+  nombre varchar(50),
+  mail varchar(70),
+  tarjetacredito blob,
+  primary key (nombre)
+);
+
+insert into clientes 
+  values ('Marcos Luis','marcosluis@gmail.com',aes_encrypt('5390700823285988','xyz123'));
+insert into clientes 
+  values ('Ganzalez Ana','gonzalesa@gmail.com',aes_encrypt('4567230823285445','xyz123'));
+insert into clientes 
+  values ('Lopez German','lopezg@yahoo.com',aes_encrypt('7840704453285443','xyz123'));
+  
+  select tarjetacredito from clientes;
+  
+  select cast(aes_decrypt(tarjetacredito, 'xyz123') as char) from clientes;
+  
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+/*Creamos la Base de Datos.*/
+CREATE DATABASE IF NOT EXISTS subconsultas;
+USE subconsultas;
+
+CREATE TABLE IF NOT EXISTS libros(
+  codigo int auto_increment,
+  titulo varchar(40),
+  autor varchar(30),
+  editorial varchar(20),
+  precio decimal(5,2),
+  primary key(codigo)
+);
+
+insert into libros(titulo,autor,editorial,precio) 
+  values('Alicia en el pais de las maravillas','Lewis Carroll','Emece',20.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Alicia en el pais de las maravillas','Lewis Carroll','Plaza',35.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Aprenda PHP','Mario Molina','Siglo XXI',40.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('El aleph','Borges','Emece',10.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Ilusiones','Richard Bach','Planeta',15.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Java en 10 minutos','Mario Molina','Siglo XXI',50.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Martin Fierro','Jose Hernandez','Planeta',20.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Martin Fierro','Jose Hernandez','Emece',30.00);
+ insert into libros(titulo,autor,editorial,precio)
+  values('Uno','Richard Bach','Planeta',10.00);
+  
+/*Sintaxis básica Subconsultas*/
+/*select CAMPOS from TABLA where CAMPO OPERADOR(SUBCONSULTA);*/
+/*select CAMPO OPERADOR(SUBCONSULTA) from TABLA;*/
+
+select titulo, precio, precio-(select max(precio) from libros) as diferencia from libros where titulo='uno';
+select titulo, autor, precio from libros where precio=(select max(precio) from libros);
+
+/*SubConsultas con in and not in*/
+
+drop table if exists editoriales;
+drop table if exists libros;
+
+ create table editoriales(
+  codigo int auto_increment,
+  nombre varchar(30),
+  primary key (codigo)
+ );
+ 
+ create table libros (
+  codigo int auto_increment,
+  titulo varchar(40),
+  autor varchar(30),
+  codigoeditorial smallint,
+  primary key(codigo)
+ );
+
+ insert into editoriales(nombre) values('Planeta');
+ insert into editoriales(nombre) values('Emece');
+ insert into editoriales(nombre) values('Paidos');
+ insert into editoriales(nombre) values('Siglo XXI');
+
+ insert into libros(titulo,autor,codigoeditorial) values('Uno','Richard Bach',1);
+ insert into libros(titulo,autor,codigoeditorial) values('Ilusiones','Richard Bach',1);
+ insert into libros(titulo,autor,codigoeditorial) values('Aprenda PHP','Mario Molina',4);
+ insert into libros(titulo,autor,codigoeditorial) values('El aleph','Borges',2);
+ insert into libros(titulo,autor,codigoeditorial) values('Puente al infinito','Richard Bach',2);
+ 
+ select nombre from editoriales where codigo in (select codigoeditorial from libros where autor='Richard Bach');
+ 
+ select codigoeditorial from libros where autor='Richard Bach'; 
+  
+ select distinct nombre from editoriales as e join libros on codigoeditorial=e.codigo where autor='Richard Bach';
+ 
+ select nombre from editoriales where codigo not in (select codigoeditorial from libros where autor='Richard Bach');
+ 
+ /*SubConsultas any-some-all*/
+ 
+ drop table if exists editoriales;
+ drop table if exists libros;
+ 
+ create table editoriales(
+  codigo int auto_increment,
+  nombre varchar(30),
+  primary key (codigo)
+ );
+ 
+ create table libros (
+  codigo int auto_increment,
+  titulo varchar(40),
+  autor varchar(30),
+  codigoeditorial smallint,
+  precio decimal(5,2),
+  primary key(codigo)
+ );
+
+ insert into editoriales(nombre) values('Planeta');
+ insert into editoriales(nombre) values('Emece');
+ insert into editoriales(nombre) values('Paidos');
+ insert into editoriales(nombre) values('Siglo XXI');
+
+ insert into libros(titulo,autor,codigoeditorial,precio) values('Uno','Richard Bach',1,15);
+ insert into libros(titulo,autor,codigoeditorial,precio) values('Ilusiones','Richard Bach',4,18);
+ insert into libros(titulo,autor,codigoeditorial,precio) values('Puente al infinito','Richard Bach',2,20);
+ insert into libros(titulo,autor,codigoeditorial,precio) values('Aprenda PHP','Mario Molina',4,40);
+ insert into libros(titulo,autor,codigoeditorial,precio) values('El aleph','Borges',2,10);
+ insert into libros(titulo,autor,codigoeditorial,precio) values('Antología','Borges',1,20);
+ insert into libros(titulo,autor,codigoeditorial,precio) values('Cervantes y el quijote','Borges',3,25);
+ 
+  select titulo from libros where autor='Borges' and codigoeditorial = any 
+ (select e.codigo from editoriales as e join libros as l on codigoeditorial=e.codigo where l.autor='Richard Bach');
+ 
+ select titulo from libros where autor='Borges' and codigoeditorial = all
+ (select e.codigo from editoriales as e join libros as l on codigoeditorial=e.codigo where l.autor='Richard Bach');
+ 
+ select titulo, precio from libros where autor='Borges' and precio > any
+ (select precio from libros where autor = 'Richard Bach');
+ 
+/*SubConsultas Exists not Exists*/
+
+drop table if exists facturas;
+drop table if exists detalles;
+ 
+ create table facturas(
+  numero int not null,
+  fecha date,
+  cliente varchar(30),
+  primary key(numero)
+ );
+
+ create table detalles(
+  numerofactura int not null,
+  numeroitem int not null, 
+  articulo varchar(30),
+  precio decimal(5,2),
+  cantidad int,
+  primary key(numerofactura,numeroitem)
+ );
+
+ insert into facturas values(1200,'2019-01-15','Juan Lopez');
+ insert into facturas values(1201,'2012-01-15','Luis Torres');
+ insert into facturas values(1202,'2019-01-15','Ana Garcia');
+ insert into facturas values(1300,'2019-01-20','Juan Lopez');
+
+ insert into detalles values(1200,1,'lapiz',1,100);
+ insert into detalles values(1200,2,'goma',0.5,150);
+ insert into detalles values(1201,1,'regla',1.5,80);
+ insert into detalles values(1201,2,'goma',0.5,200);
+ insert into detalles values(1201,3,'cuaderno',4,90);
+ insert into detalles values(1202,1,'lapiz',1,200);
+ insert into detalles values(1202,2,'escuadra',2,100);
+ insert into detalles values(1300,1,'lapiz',1,300);
+ 
+ select cliente, numero from facturas as f where exists
+ (select * from detalles as d where f.numero=d.numerofactura and d.articulo='lapiz');
+ 
+   select cliente, numero from facturas as f where  not exists
+ (select * from detalles as d where f.numero=d.numerofactura and d.articulo='lapiz');
+ 
+ 
+ /*SubConsulta update-delete*/
+ 
+ drop table if exists editoriales;
+ drop table if exists libros;
+ 
+ create table editoriales(
+  codigo int auto_increment,
+  nombre varchar(30),
+  primary key (codigo)
+ );
+ 
+ create table libros (
+  codigo int auto_increment,
+  titulo varchar(40),
+  autor varchar(30),
+  codigoeditorial smallint,
+  precio decimal(5,2),
+  primary key(codigo)
+ );
+
+ insert into editoriales(nombre) values('Planeta');
+ insert into editoriales(nombre) values('Emece');
+ insert into editoriales(nombre) values('Paidos');
+ insert into editoriales(nombre) values('Siglo XXI');
+
+ insert into libros(titulo,autor,codigoeditorial,precio) 
+   values('Uno','Richard Bach',1,15);
+ insert into libros(titulo,autor,codigoeditorial,precio)
+   values('Ilusiones','Richard Bach',2,20);
+ insert into libros(titulo,autor,codigoeditorial,precio)
+   values('El aleph','Borges',3,10);
+ insert into libros(titulo,autor,codigoeditorial,precio)
+   values('Aprenda PHP','Mario Molina',4,40);
+ insert into libros(titulo,autor,codigoeditorial,precio)
+   values('Poemas','Juan Perez',1,20);
+ insert into libros(titulo,autor,codigoeditorial,precio)
+   values('Cuentos','Juan Perez',3,25);
+ insert into libros(titulo,autor,codigoeditorial,precio)
+   values('Java en 10 minutos','Marcelo Perez',2,30);
+   
+   update TABLA set CAMPO=NUEVOVALOR where CAMPO =(SUBCONSULTA);
+   
+   select * from libros;
+   
+   update libros set precio=precio+(precio*0.1) where codigoeditorial = (select codigo from editoriales where nombre='emece');
+   
+   delete from TABLA where CAMPO = (SUBCONSULTA);
+   
+   delete from libros where codigoeditorial = (select e.codigo from editoriales as e where nombre ='Planeta');
+   
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS vistas;
+USE vistas;
+
+drop table if exists empleados;
+drop table if exists secciones;
+
+ create table secciones(
+  codigo int auto_increment primary key,
+  nombre varchar(30),
+  sueldo decimal(5,2)
+ );
+
+ create table empleados(
+  legajo int primary key auto_increment,
+  documento char(8),
+  sexo char(1),
+  apellido varchar(40),
+  nombre varchar(30),
+  domicilio varchar(30),
+  seccion int not null,
+  cantidadhijos int,
+  estadocivil char(10),
+  fechaingreso date
+ );
+
+ insert into secciones(nombre,sueldo) values('Administracion', 300);
+ insert into secciones(nombre,sueldo) values('Contaduría', 400);
+ insert into secciones(nombre,sueldo) values('Sistemas', 500);
+
+ insert into empleados (documento,sexo,apellido,nombre,domicilio,seccion,cantidadhijos,estadocivil,fechaingreso)
+   values ('22222222','f','Lopez','Ana','Colon 123',1,2,'casado','2010-10-10');
+ insert into empleados (documento,sexo,apellido,nombre,domicilio,seccion,cantidadhijos,estadocivil,fechaingreso)   
+   values('23333333','m','Lopez','Luis','Sucre 235',1,0,'soltero','2010-02-10');
+ insert into empleados (documento,sexo,apellido,nombre,domicilio,seccion,cantidadhijos,estadocivil,fechaingreso)
+   values('24444444','m','Garcia','Marcos','Sarmiento 1234',2,3,'divorciado','2018-07-12');
+ insert into empleados (documento,sexo,apellido,nombre,domicilio,seccion,cantidadhijos,estadocivil,fechaingreso)
+   values('25555555','m','Gomez','Pablo','Bulnes 321',3,2,'casado','2018-10-09');
+ insert into empleados (documento,sexo,apellido,nombre,domicilio,seccion,cantidadhijos,estadocivil,fechaingreso)
+   values('26666666','f','Perez','Laura','Peru 1254',3,3,'casado','2019-05-09');
+   
+create view NOMBREVISTA as SENTENCIASSELECT from TABLA; 
+
+create view vista_empleado as select concat(apellido, ' ', e.nombre) as nombre, sexo, s.nombre as seccion,
+cantidadhijos from empleados as e join secciones as s on codigo=seccion;
+
+
+select * from vista_empleado;
+
+select seccion, count(*) as cantidad from vista_empleado group by seccion;
+
+drop view if exists vista_empleado;
+ 
+create view NOMBREVISTA (NOMBRESDEENCABEZADOS) as SETENCIASSELECT from TABLA;
+create view vista_empleado_ingreso (fecingreso,cantidad) as select extract(year from fechaingreso) as
+fecingreso, count(*) as cantidad from empleados group by fecingreso;
+
+select * from vista_empleado_ingreso;
+   
+select * from TABLA;
+   
+drop view if exists NOMBREVISTA;
+
+
+/*Vistas basadas en otras Vistas*/
+select * from vista_empleado;
+
+create view vista_empleado_con_hijos as select nombre, sexo, seccion, cantidadhijos
+from vista_empleado where cantidadhijos>00;
+
+select * from vista_empleado_con_hijos;
+
+
+
+/*Vistas actualizables (insert-update)*/
+drop table if exists alumnos;
+drop table if exists profesores;
+ 
+ create table alumnos(
+  documento char(8),
+  nombre varchar(30),
+  nota decimal(4,2),
+  codigoprofesor int,
+  primary key(documento)
+ );
+
+ create table profesores (
+   codigo int auto_increment,
+   nombre varchar(30),
+   primary key(codigo)
+ );
+
+
+ insert into alumnos values('30111111','Ana Algarbe', 5.1, 1);
+ insert into alumnos values('30222222','Bernardo Bustamante', 3.2, 1);
+ insert into alumnos values('30333333','Carolina Conte',4.5, 1);
+ insert into alumnos values('30444444','Diana Dominguez',9.7, 1);
+ insert into alumnos values('30555555','Fabian Fuentes',8.5, 2);
+ insert into alumnos values('30666666','Gaston Gonzalez',9.70, 2);
+
+ insert into profesores(nombre) values ('Yoselin Valdez');
+ insert into profesores(nombre) values ('Luis Agromonte');
+ 
+ select * from alumnos;
+ 
+ 
+ create view vista_nota_alumnos_aprodabos as
+ select documento,
+ a.nombre as nombrealumno,
+ p.nombre as nombreprofesor,
+ nota,
+ codigoprofesor from alumnos as a
+ join profesores as p on a.codigoprofesor=p.codigo
+ where nota>=7;
+ 
+ select * from vista_nota_alumnos_aprodabos;
+ 
+ insert into vista_nota_alumnos_aprodabos(documento, nombrealumno, nota, codigoprofesor)
+ values('86876768', 'Juan Pablo', 10, 1);
+ 
+  insert into vista_nota_alumnos_aprodabos(documento, nombrealumno, nota, codigoprofesor)
+ values('86586932', 'Alejandro Martinez', 5, 1);
+ 
+ update vista_nota_alumnos_aprodabos set nota=10 where documento='30444444';
+ 
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS procedimientosalmacenados;
+USE procedimientosalmacenados;
+
+drop table if exists libros;
+
+create table libros(
+  codigo int auto_increment,
+  titulo varchar(40),
+  autor varchar(30),
+  editorial varchar(20),
+  precio decimal(5,2),
+  stock int,
+  primary key(codigo)
+);
+
+ insert into libros(titulo,autor,editorial,precio,stock) 
+  values('Alicia en el pais de las maravillas','Lewis Carroll','Emece',20.00, 9);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Alicia en el pais de las maravillas','Lewis Carroll','Plaza',35.00, 50);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Aprenda PHP','Mario Molina','Siglo XXI',40.00, 3);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('El aleph','Borges','Emece',10.00, 18);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Ilusiones','Richard Bach','Planeta',15.00, 22);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Java en 10 minutos','Mario Molina','Siglo XXI',50.00, 7);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Martin Fierro','Jose Hernandez','Planeta',20.00, 3);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Martin Fierro','Jose Hernandez','Emece',30.00, 70);
+ insert into libros(titulo,autor,editorial,precio,stock)
+  values('Uno','Richard Bach','Planeta',10.00, 120);
+
+create procedure
+
+create procedure NOMBREPROCEDIMIENTO()
+begin
+	INSTRUCCIONES
+end;
+
+call NOMBREPROCEDIMIENTO();
+
+drop procedure if exists NOMBREPROCEDIMIENTO;
+
+delimiter //
+create procedure pa_libros_stock()
+begin
+	select * from libros where stock<=10;
+end //
+delimiter ;
+
+call pa_libros_stock();
+
+/*Parametros de Entrada*/
+
+create procedure NOMBREPROCEDIMIENTO (in NOMBREPARAMETRO TIPODEDATO)
+begin
+end
+
+delimiter //
+create procedure pa_libros_autor(in p_autor varchar(30))
+begin 
+	select titulo, editorial, precio from libros where autor=p_autor;
+end //
+delimiter ;
+
+call pa_libros_autor('Richard Bach');
+
+delimiter //
+create procedure pa_libros_autor_editorial(
+	in p_autor varchar(30),
+    in p_editorial varchar(20)
+    )
+begin 
+	select titulo, editorial, precio from libros where autor=p_autor and editorial=p_editorial;
+end //
+delimiter ;
+
+call pa_libros_autor_editorial('Richard Bach', 'Planeta');
+call pa_libros_autor_editorial('Borges', 'Emece');
+
+/*Parametros de Salidas*/
+
+create procedure NOMBREPROCEDIMIENTO (out NOMBREPARAMETRO TIPODEDATO)
+begin
+end
+
+delimiter //
+create procedure pa_autor_totalypromedio(
+	in p_autor varchar(30),
+    out suma decimal(6,2),
+    out promedio decimal(6,2)
+)
+begin
+	select titulo, editorial, precio from libros where autor=p_autor;
+    select sum(precio) into suma from libros where autor=p_autor;
+    select avg(precio) into promedio from libros where autor=p_autor;
+end //
+delimiter ;
+
+call pa_autor_totalypromedio('Richard Bach', @s, @p);
+
+select @s, @p;
+
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS disparadores_triggers;
+USE disparadores_triggers;
+
+drop table if exists usuarios;
+drop table if exists clavesanteriores;
+
+
+create table usuarios(
+ nombre varchar(30),
+ clave varchar(30),
+ primary key (nombre)
+);
+
+create table clavesanteriores(
+ numero int auto_increment,
+ nombre varchar(30),
+ clave varchar(30),
+ primary key (numero)
+);
+
+create trigger NOMBRETRIGGER
+[before/ after] [insert / delete/ update]
+on TABLA
+for each now 
+begin
+end
+
+drop trigger if exists befo_usuarios_update;
+
+delimiter //
+create trigger befo_usuarios_update
+  before update
+  on usuarios
+  for each row
+begin
+  insert into clavesanteriores(nombre, clave) values (old.nombre, old.clave); 
+end //
+delimiter ;
+
+insert into usuarios(nombre, clave) value('Juan', '1234');
+insert into usuarios(nombre, clave) value('Miguel', '7894');
+insert into usuarios(nombre, clave) value('Martin', '1234');
+select * from usuarios;
+
+
+
+update usuarios set  clave='56789' where nombre='Juan';
+update usuarios set  clave='5612' where nombre='Miguel';
+update usuarios set  clave='5678' where nombre='Martin';
+
+select * from clavesanteriores;
+
+/*Triggers Insert*/
+
+drop table if exists ventas;
+drop table if exists libros;
+
+create table libros(
+  codigo int auto_increment,
+  titulo varchar(50),
+  autor varchar(50),
+  editorial varchar(30),
+  precio float, 
+  stock int,
+  primary key (codigo)
+ );
+
+ create table ventas(
+  numero int auto_increment,
+  codigolibro int,
+  precio float,
+  cantidad int,
+  primary key (numero)
+ );
+
+
+ insert into libros(titulo, autor, editorial, precio, stock)
+  values('Uno','Richard Bach','Planeta',15,100);   
+ insert into libros(titulo, autor, editorial, precio, stock)
+  values('Ilusiones','Richard Bach','Planeta',18,50);
+ insert into libros(titulo, autor, editorial, precio, stock)
+  values('El aleph','Borges','Emece',25,200);
+ insert into libros(titulo, autor, editorial, precio, stock)
+  values('Aprenda PHP','Mario Molina','Emece',45,200);
+  
+delimiter //
+create trigger before_ventas_insert
+before insert
+on ventas
+for each row
+begin
+	update libros set stock=libros.stock-new.cantidad
+    where new.codigolibro=libros.codigo;
+end //
+delimiter ;
+
+drop trigger before_ventas_insert;
+
+select * from libros;
+select * from ventas;
+
+insert into ventas(codigolibro, precio, cantidad) value(3, 25, 25);
+
+/*Trigger Delete*/
+
+
+
+https://www.udemy.com/course/aprende-sql-desde-cero-hasta-avanzado-como-un-profesional/learn/lecture/15836316#learning-tools

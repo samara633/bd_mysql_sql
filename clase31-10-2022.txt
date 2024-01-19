@@ -1,0 +1,95 @@
+Realizar nomina en la cual podamos calcular el pago total que se le hace 
+a un trabajor pagandole por dias 
+cada item de la nomina sera calculado con funciones 
+y posteriormente se insertara un registro por medio de un procedimiento 
+
+
+delimiter $$
+create function salarioMensual(salario double, diasTrabajados int)
+returns double
+begin 
+declare salMen double;  
+set salMen = (salario/30)*diasTrabajados;
+return salMen;
+end $$
+delimiter ; 
+
+auxilio de TRansporte 117.172 pesos
+
+delimiter $$
+create function auxTransporte(salario double)
+returns double
+begin 
+declare dobleMinimo double;
+declare auxilio double; 
+set dobleMinimo = 2000000;
+if salario <= dobleMinimo then 
+set auxilio = 117172;
+else 
+set auxilio = 0; 
+end if ; 
+return auxilio; 
+end $$
+delimiter ; 
+
+comision bono 2%
+
+delimiter $$
+create function comision(salario double, diasTrabajados int)
+returns double
+begin 
+declare comision double;
+set comision = (salarioMensual(salario, diasTrabajados )*2)/100; 
+return comision; 
+end $$
+delimiter ; 
+
+salud y pension se calcula descontale 4%
+
+delimiter $$
+create function salud(salario double, diastrabajados int)
+returns double
+begin
+declare salud double; 
+set salud =  (salarioMensual(salario, diasTrabajados ))*0.04;
+return salud; 
+end $$
+delimiter  ; 
+
+total devengado
+salario + aux +comision - salud- pension 
+
+delimiter $$
+create function totalD(salario double, diasTrabajados int)
+returns double
+begin
+declare total double;
+set total = salarioMensual(salario, diasTrabajados )+ auxTransporte(salario) +
+comision(salario, diasTrabajados)- salud(salario , diastrabajados)*2;
+return total;
+end $$
+delimiter ; 
+
+procedimiento ....
+
+ delimiter $$
+create procedure insertarEmpleado(IN id int, IN nombre varchar(30), in salario double, 
+IN diasTrabajados int)
+begin 
+insert into nomina values (id, nombre, salario, diastrabajados, 
+auxTransporte(salario),comision(salario, diasTrabajados), salud(salario , diastrabajados),
+salud(salario , diastrabajados), totalD(salario , diasTrabajados )); 
+end $$
+delimiter ; 
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+delimiter $$
+create procedure editarCliente(in id varchar(30), in nombre varchar(40),in ruc varchar(30))
+begin 
+update cliente set id_cliente = id , nombre_cliente = nombre, ruc_dni = ruc 
+where id_cliente = id;
+end $$
+delimiter  ;  
+
+CASE case_value
+    WHEN when_value THEN statement_list
+    [WHEN when_value THEN statement_list] ...
+    [ELSE statement_list]
+END CASE
+
+crear un procedimiento que permita unificar las 4 acciones realizadas, crear, listar, editar, eliminar 
+
+delimiter $$
+create procedure crud(in opcion varchar(40), in id varchar(30), in nombre varchar(40), in ruc(30), in tipo varchar(40), 
+in dire varchar(40), in tel varchar(30))
+begin 
+CASE opcion
+when "crear" then insert into cliente values (id , nombre , ruc,  tipo, dire, tel); 
+when "eliminar" then delete from  cliente where id_cliente = id;
+when "listar" then select * from cliente where id_cliente = id;
+when "editar" then update cliente set id_cliente = id , nombre_cliente = nombre, ruc_dni = ruc 
+where id_cliente = id;
+end case; 
+end $$
+delimiter ; 
+
+
+call crud("crear", "0101", 'lina','gb222', 'frecuente', 'calle 120', '123456');
+
+call crud("eliminar", "0101", '','', '', '', '');
+
+call crud("listar", "100", '','', '', '', '');
+
+call crud("editar", "200", 'juan lugo','CLJ456', '', '', '');
